@@ -11,21 +11,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.messagebuddy.entity.User;
 import br.com.messagebuddy.service.ConversationService;
 import br.com.messagebuddy.service.UserService;
-import br.com.messagebuddy.util.FileSaver;
 import br.com.messagebuddy.util.UserEdit;
 import br.com.messagebuddy.util.UserSearchForm;
 
 @Controller
 public class UserController{
-	
-	@Autowired
-	private FileSaver fileSaver;
 
 	@Autowired
 	UserService userService;
@@ -58,12 +53,11 @@ public class UserController{
 	//CRUD operations
 	
 	@PostMapping("/adduser")
-	public String addUser(@Valid User user, MultipartFile picture, BindingResult bindingResult) {
+	public String addUser(@Valid User user, BindingResult bindingResult) {
+		System.out.println("Method invoked on Controller...");
 		if(bindingResult.hasErrors()) {
 			return "add-user";
 		}
-		String path = fileSaver.write("user", picture);
-		user.setPicturePath(path);
 		userService.saveUser(user);
 		return "login";
 	}

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.messagebuddy.entity.Role;
 import br.com.messagebuddy.entity.User;
-import br.com.messagebuddy.mail.EmailSender;
 import br.com.messagebuddy.repository.MembershipRepository;
 import br.com.messagebuddy.repository.RoleRepository;
 import br.com.messagebuddy.repository.UserRepository;
@@ -33,21 +32,20 @@ public class UserServiceImpl implements UserService{
 	PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	EmailSender emailSender;
-	
-	@Autowired
 	MembershipRepository memberRepository;
 	
 	@Override
-	public void saveUser(User user) {		
+	public void saveUser(User user) {
+		System.out.println("Invoking method on Service...");
 		user.setSignupDate(new Date());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPicturePath("/img/user/userimg.png");
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(roleRepository.findRoleById("ROLE_USER"));
 		user.setRoles(roles);
-		//emailSender.sendMessage(user.getEmail(), "Welcome", "Welcome to our system, " + user.getName() + "! Your username is: " + user.getUsername());
-				
-		userRepository.save(user);		
+						
+		User registeredUser = userRepository.save(user);
+		System.out.println("Registered user: " + registeredUser.getUsername());
 	}
 	
 	@Override
@@ -106,10 +104,6 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		return users;
-	}
-
-	
-
-	
+	}	
 
 }

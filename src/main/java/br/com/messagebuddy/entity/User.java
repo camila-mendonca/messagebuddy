@@ -42,14 +42,14 @@ public class User implements Serializable, UserDetails{
 	private String password;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
-	@NotBlank(message = "Name is mandatory")
+	@NotBlank(message = "First name is mandatory")
 	@Field(index =  Index.YES, analyze = Analyze.YES)
 	private String firstName;
 	@Field(index = Index.YES, analyze = Analyze.YES)
 	private String lastName;
 	@NotBlank(message = "Email is mandatory")
 	private String email;
-	@NotNull
+	//@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 	private String city;
@@ -149,10 +149,10 @@ public class User implements Serializable, UserDetails{
 	public String getPicturePath() {
 		return picturePath;
 	}
-
+	  
 	public void setPicturePath(String picturePath) {
 		this.picturePath = picturePath;
-	}
+	}	 
 
 	public Date getSignupDate() {
 		return signupDate;
