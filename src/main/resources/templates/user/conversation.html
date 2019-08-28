@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{base}">
+<head>
+	<title>Conversation</title>
+</head>
+
+<body>
+
+	<div layout:fragment="page_content">
+	<div th:if="${conversation.open == false} and ${isMember == false}">
+		<div class="alert alert-warning" role="alert">
+			Ooops! Nothing to see here!
+		</div>
+	</div>
+	<div th:unless="${conversation.open == false} and ${isMember==false}">
+		<div class="row">
+			<div class="col-xl-6 col-lg-6">
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">
+							<span th:text="${conversation.subject}"></span>
+						</h6>
+					</div>
+					<div class="card-body">
+						<p>Created on <span th:text="${#dates.format(conversation.creationDate, 'dd/MM/yyyy')}"></span>
+						by <span th:text="${conversation.user.username}"></span></p>
+					</div>
+
+				</div>
+			</div>
+			
+		</div>
+		<div class="row">
+			<!-- Messages -->
+			<div class="col-xl-6 col-lg-6">
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Messages</h6>
+					</div>
+					<div class="card-body">
+						<div th:if="${isMember == true}">
+							<form id="msgForm" th:action="@{/user/addmessage}" th:object="${message}" method="post" class="mb-3">
+								<input type="hidden" th:field="*{conversation}" th:value="${message.conversation}">
+								<div class="form-group row">
+									<div class="col-lg-10">
+										<input type="text" th:field="*{subject}" id="subject" name="subject" class="form-control">
+									</div>
+									<div class="col-lg-2">
+										<input type="submit" class="btn btn-primary" value="Send">					
+									</div>
+								</div>
+							</form>
+							<!-- <script>formInterceptor("msgForm");</script> -->
+						</div>
+						<div th:if="${isMember == false}">
+							<p>You need to be a member to send messages!</p>
+							<a class="btn btn-primary" th:href="@{/user/becomemember/{id}(id=${conversation.conversationId})}" role="button">Become Member</a>
+						</div>
+						
+						<div th:each="msg : ${messages}" class="border border-blue rounded-sm text-dark p-1 mb-1">
+							<small><span th:text="${msg.user.username}"></span>:</small>
+							<p class="mb-0"><span th:text="${msg.subject}"></span></p>
+							<small class="text-muted mt-0">Sent on <span th:text="${#dates.format(msg.dateSent, 'dd/MM/yyyy') + ' at ' + #dates.format(msg.dateSent, 'hh:mm')}"></span></small>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Members -->
+			<div class="col-xl-6 col-lg-6">
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Members</h6>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div th:each="member : ${conversation.members}" class="column mx-1">
+								<div th:if="${member.invitationStatus.name() == 'accepted'}">
+									<img class="img-member rounded-circle" th:src="${member.user.picturePath}" th:title="${member.user.username}">
+									
+								</div>
+							</div>
+						</div>
+						<hr>
+						<p>Search users to invite:</p>
+						<form th:action="@{/user/searchuser}" th:object=${userSearch} method="post" class="mb-3">
+							<input type="hidden" th:field="*{conversation}" th:value="${userSearch.conversation}" name="conversation">
+							<div class="form-group row">
+								<div class="col-lg-6 mb-3 mb-sm-0">
+									<input type="text" th:field="*{word}" id="word" name="Word" class="form-control" />
+								</div>
+								<div class="col-lg-6">
+									<select th:field="*{field}" class="form-control">
+										<option th:value="username">Username</option>
+										<option th:value="firstName">First Name</option>
+										<option th:value="lastName">Last Name</option>
+									</select>
+								</div>
+							</div>
+							<input type="submit" value="Search" class="btn btn-primary">
+						</form>
+						<div class="row mb-3" th:each="user : ${users}">
+							<div class="col-2">
+								<img th:src="${user.picturePath}" class="img-fluid" />
+							</div>
+							<div class="col">
+								<h6 class="font-weight-bold">
+									<span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+								</h6>
+								<span th:text="${user.city} + ', ' + ${user.country}"></span>
+							</div>
+							<div class="col">
+								<a class="btn btn-primary" th:href="@{/user/invite/person={person},conversation={conversation}(person=${user.userId},conversation=${conversation.conversationId}) }" role="button">Invite</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>
