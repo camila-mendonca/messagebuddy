@@ -54,7 +54,6 @@ public class UserController{
 	
 	@PostMapping("/adduser")
 	public String addUser(@Valid User user, BindingResult bindingResult) {
-		System.out.println("Method invoked on Controller...");
 		if(bindingResult.hasErrors()) {
 			return "add-user";
 		}
