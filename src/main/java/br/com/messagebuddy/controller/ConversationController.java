@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import br.com.messagebuddy.entity.Conversation;
 import br.com.messagebuddy.entity.Message;
@@ -50,6 +49,7 @@ public class ConversationController {
 		return auth;
 	}
 	
+	//To avoid repetition of code, this function was created, where all the data necessary to load the conversation page is retrieved
 	private Model getConversationData(Long conversationId, Model model, Message message, UserSearchForm userSearch) {
 		Conversation conversation = conversationService.loadConversation(conversationId);
 		model.addAttribute("conversation", conversation);
@@ -81,15 +81,7 @@ public class ConversationController {
 			return "user/add-conversation";
 		}		
 		conversationService.saveConversation(conversation, this.getLoggedUser().getName());
-		return "redirect:/user/myconversations";
-	}
-	
-	@GetMapping("/user/myconversations")
-	public ModelAndView listMyConversations() {
-		ModelAndView modelAndView = new ModelAndView("user/list-user-conversations");
-		modelAndView.addObject("conversations", conversationService.listConversationsByUser(this.getLoggedUser().getName()));
-		modelAndView.addObject("memberConversations", memberService.listAcceptedMembershipsByUser(this.getLoggedUser().getName()));
-		return modelAndView;
+		return "redirect:/user/index";
 	}
 	
 	@GetMapping("/user/allconversations")
@@ -104,6 +96,8 @@ public class ConversationController {
 		
 		return "user/conversation";
 	}
+	
+	// Member related methods
 	
 	@GetMapping("/user/invite/person={person},conversation={conversation}")
 	public String inviteUserToConversation(@PathVariable("person") Long userId, @PathVariable("conversation") Long conversationId, Model model, Message message, UserSearchForm userSearch ) {
@@ -120,15 +114,20 @@ public class ConversationController {
 		return "user/conversation";
 	}
 	
+	//Message related methods
+	
 	@PostMapping("/user/addmessage")
 	public String addMessage(@ModelAttribute("message") Message message, BindingResult bindingResult, Model model, UserSearchForm userSearch) {
+		/*
+		 * Somehow it's not working, no matter where I place it
+		 * if(bindingResult.hasErrors()) { return "user/conversation"; }
+		 */
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		messageService.addMessage(message, auth.getName());
-		
 		Message newMessage = new Message();
 		newMessage.setConversation(message.getConversation());
 		model = this.getConversationData(message.getConversation().getConversationId(), model, newMessage, userSearch);
-		
+						
 		return "user/conversation";
 	}
 

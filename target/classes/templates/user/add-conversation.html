@@ -4,6 +4,19 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{base}">
 <head>
 <title>New Conversation</title>
+<script type="text/javascript">
+	$(document).ready(function () {
+	    $('#create').attr('disabled', true);
+	    $('#subject').on('keyup', function () {	        
+	        var text_value = $('#subject').val();
+	        if (text_value != '') {
+	            $('#create').attr('disabled', false);
+	        } else {
+	            $('#create').attr('disabled', true);
+	        }
+	    });
+	});
+	</script>
 </head>
 
 <body>
@@ -20,6 +33,7 @@ layout:decorate="~{base}">
 				
 				<div class="form-group">		
 					<input type="text" th:field="*{subject}" id="subject" class="form-control" placeholder="Subject">
+					<span th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></span>
 				</div>
 				
 				<div class="form-group form-check">
@@ -27,7 +41,7 @@ layout:decorate="~{base}">
 					<label class="form-check-label" for="open">Open to public</label>
 				</div>
 						
-				<input type="submit" value="Create Conversation" class="btn btn-primary">
+				<input type="submit" value="Create Conversation" class="btn btn-primary" id="create">
 			
 			</div>
 		</div>

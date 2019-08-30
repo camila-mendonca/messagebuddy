@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.com.messagebuddy.entity.User;
 import br.com.messagebuddy.service.ConversationService;
+import br.com.messagebuddy.service.MembershipService;
 import br.com.messagebuddy.service.UserService;
 import br.com.messagebuddy.util.UserEdit;
 import br.com.messagebuddy.util.UserSearchForm;
@@ -28,11 +29,19 @@ public class UserController{
 	@Autowired
 	ConversationService conversationService;
 	
+	@Autowired
+	MembershipService memberService;
+	
 	@ModelAttribute("currentUser")
 	public User currentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.loadUser(auth.getName());
 		return user;
+	}
+	
+	private Authentication getLoggedUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth;
 	}
 	 
 	@GetMapping("/signup")
@@ -41,8 +50,11 @@ public class UserController{
 	}	
 	
 	@GetMapping("/user/index")
-	public String showUserIndex() {
-		return "user/index";
+	public ModelAndView listMyConversations() {
+		ModelAndView modelAndView = new ModelAndView("user/list-user-conversations");
+		modelAndView.addObject("conversations", conversationService.listConversationsByUser(this.getLoggedUser().getName()));
+		modelAndView.addObject("memberConversations", memberService.listAcceptedMembershipsByUser(this.getLoggedUser().getName()));
+		return modelAndView;
 	}
 	
 	@GetMapping("/admin/index")

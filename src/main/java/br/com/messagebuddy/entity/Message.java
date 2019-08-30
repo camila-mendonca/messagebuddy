@@ -30,7 +30,7 @@ public class Message implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateSent;
 	
-	@NotBlank(message = "Please write your message... Your fool!")
+	@NotBlank(message = "Please write your message")
 	private String subject;
 
 	public Message() {

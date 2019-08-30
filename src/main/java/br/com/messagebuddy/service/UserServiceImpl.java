@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.messagebuddy.entity.InvitationStatus;
+import br.com.messagebuddy.entity.Membership;
 import br.com.messagebuddy.entity.Role;
 import br.com.messagebuddy.entity.User;
+import br.com.messagebuddy.repository.ConversationRepository;
 import br.com.messagebuddy.repository.MembershipRepository;
 import br.com.messagebuddy.repository.RoleRepository;
 import br.com.messagebuddy.repository.UserRepository;
@@ -34,18 +37,29 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	MembershipRepository memberRepository;
 	
+	@Autowired
+	ConversationRepository conversationRepository;
+	
 	@Override
 	public void saveUser(User user) {
-		System.out.println("Invoking method on Service...");
 		user.setSignupDate(new Date());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		//Soon we'll have a list of pictures to choose
+		//Further in the future, an image cropper
 		user.setPicturePath("/img/user/userimg.png");
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(roleRepository.findRoleById("ROLE_USER"));
 		user.setRoles(roles);
 						
 		User registeredUser = userRepository.save(user);
-		System.out.println("Registered user: " + registeredUser.getUsername());
+		
+		//Now let's add the new user as a member of the Welcome conversation
+		Membership membership = new Membership();
+		membership.setConversation(conversationRepository.findById((long) 31).get());
+		membership.setUser(registeredUser);
+		membership.setMemberSince(new Date());
+		membership.setInvitationStatus(InvitationStatus.accepted);
+		memberRepository.save(membership);
 	}
 	
 	@Override

@@ -4,6 +4,29 @@
 	layout:decorate="~{base}">
 <head>
 	<title>Conversation</title>
+	<script type="text/javascript">
+	$(document).ready(function () {
+	    $('#sendMessage').attr('disabled', true);
+	    $('#subject').on('keyup', function () {	        
+	        var text_value = $('#subject').val();
+	        if (text_value != '') {
+	            $('#sendMessage').attr('disabled', false);
+	        } else {
+	            $('#sendMessage').attr('disabled', true);
+	        }
+	    });
+	    
+	    $('#searchUser').attr('disabled', true);
+	    $('#word').on('keyup', function () {	        
+	        var text_value = $('#word').val();
+	        if (text_value != '') {
+	            $('#searchUser').attr('disabled', false);
+	        } else {
+	            $('#searchUser').attr('disabled', true);
+	        }
+	    });
+	});
+	</script>
 </head>
 
 <body>
@@ -11,7 +34,7 @@
 	<div layout:fragment="page_content">
 	<div th:if="${conversation.open == false} and ${isMember == false}">
 		<div class="alert alert-warning" role="alert">
-			Ooops! Nothing to see here!
+			This is a private conversation! In order to access it you need an invitation.
 		</div>
 	</div>
 	<div th:unless="${conversation.open == false} and ${isMember==false}">
@@ -48,11 +71,10 @@
 										<input type="text" th:field="*{subject}" id="subject" name="subject" class="form-control">
 									</div>
 									<div class="col-lg-2">
-										<input type="submit" class="btn btn-primary" value="Send">					
+										<input type="submit" id="sendMessage" class="btn btn-primary" value="Send">					
 									</div>
 								</div>
 							</form>
-							<!-- <script>formInterceptor("msgForm");</script> -->
 						</div>
 						<div th:if="${isMember == false}">
 							<p>You need to be a member to send messages!</p>
@@ -77,8 +99,7 @@
 						<div class="row">
 							<div th:each="member : ${conversation.members}" class="column mx-1">
 								<div th:if="${member.invitationStatus.name() == 'accepted'}">
-									<img class="img-member rounded-circle" th:src="${member.user.picturePath}" th:title="${member.user.username}">
-									
+									<img class="img-member rounded-circle" th:src="${member.user.picturePath}" th:title="${member.user.username}">									
 								</div>
 							</div>
 						</div>
@@ -98,7 +119,7 @@
 									</select>
 								</div>
 							</div>
-							<input type="submit" value="Search" class="btn btn-primary">
+							<input type="submit" id="searchUser" value="Search" class="btn btn-primary">
 						</form>
 						<div class="row mb-3" th:each="user : ${users}">
 							<div class="col-2">

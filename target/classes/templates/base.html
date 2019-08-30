@@ -19,6 +19,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
   <!-- Custom styles for this template-->
   <link rel="stylesheet" th:href="@{/css/sb-admin-2.min.css}"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   
 
 </head>
@@ -43,10 +44,6 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
       <hr class="sidebar-divider my-0">
 
       <li class="nav-item active">
-        <a class="nav-link" th:href="@{/user/myconversations}">
-          <span>My Conversations</span></a>
-      </li>
-      <li class="nav-item">
       	<a class="nav-link" th:href="@{/user/allconversations}">
       	  <span>All Conversations</span>
       	</a>
@@ -107,9 +104,6 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	
 	            <!-- Nav Item - User Information -->
 	            <li class="nav-item dropdown no-arrow">
-	            <div sec:authorize="!isAuthenticated()">
-	            	Login
-	            </div>
 	            <div sec:authorize="isAuthenticated()">
 		              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		                <span th:text="${currentUser.username}" class="mr-2 d-none d-lg-inline text-gray-600 small"><!-- <div sec:authentication="name"></div> --></span>

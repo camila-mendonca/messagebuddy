@@ -27,7 +27,7 @@ public class Conversation implements Serializable{
 	@ManyToOne
 	@JoinColumn
 	private User user;
-	@NotBlank(message = "The group must have a subject")
+	@NotBlank(message = "The conversation must have a subject!")
 	private String subject;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date creationDate;

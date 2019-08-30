@@ -24,7 +24,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		System.out.println("Using my security config...");
 		http
 		.authorizeRequests()
 		.antMatchers("/admin/**").hasRole("ADMIN")
@@ -36,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.formLogin().loginPage("/login").defaultSuccessUrl("/user/index").permitAll()
 		.and()
 		.logout().logoutUrl("/userLogout").logoutSuccessUrl("/");
-		//.usernameParameter("username").permitAll();
 	}
 
 	@Override
