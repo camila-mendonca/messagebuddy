@@ -38,23 +38,10 @@
 		</div>
 	</div>
 	<div th:unless="${conversation.open == false} and ${isMember==false}">
-		<div class="row">
-			<div class="col-xl-6 col-lg-6">
-				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">
-							<span th:text="${conversation.subject}"></span>
-						</h6>
-					</div>
-					<div class="card-body">
-						<p>Created on <span th:text="${#dates.format(conversation.creationDate, 'dd/MM/yyyy')}"></span>
+		<h1 class="h3 mb-2 text-gray-800"><span th:text="${conversation.subject}"></span></h1>
+		<p>Created on <span th:text="${#dates.format(conversation.creationDate, 'dd/MM/yyyy')}"></span>
 						by <span th:text="${conversation.user.username}"></span></p>
-					</div>
 
-				</div>
-			</div>
-			
-		</div>
 		<div class="row">
 			<!-- Messages -->
 			<div class="col-xl-6 col-lg-6">
