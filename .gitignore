@@ -3,3 +3,4 @@
 .project
 .classpath
 br.com.messagebuddy.entity.User
+src/main/resources/application.properties
