@@ -18,7 +18,6 @@ import br.com.messagebuddy.service.ConversationService;
 import br.com.messagebuddy.service.MembershipService;
 import br.com.messagebuddy.service.UserService;
 import br.com.messagebuddy.util.UserEdit;
-import br.com.messagebuddy.util.UserSearchForm;
 
 @Controller
 public class UserController{
@@ -62,6 +61,11 @@ public class UserController{
 		return "user/admin/index";
 	}
 	
+	@GetMapping("/user/nextreleases")
+	public String nextReleases() {
+		return "user/next-releases";
+	}
+	
 	//CRUD operations
 	
 	@PostMapping("/adduser")
@@ -83,6 +87,7 @@ public class UserController{
 	@GetMapping("/user/editcurrentuser")
 	public String showEditForm(UserEdit userEdit, Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		// Since I just want some information to be edited, I load a userEdit object and load these information into it
 		model.addAttribute("user", userService.loadUserEdit(auth.getName()));
 		return "user/edit-user";
 	}
@@ -95,12 +100,6 @@ public class UserController{
 		return "user/edit-user";
 	}
 	
-	@PostMapping("/user/searchuser")
-	public String search(UserSearchForm userSearch, Model model) {
-		model.addAttribute("users", userService.searchUser(userSearch));
-		model.addAttribute("conversation", userSearch.getConversation());
-		model.addAttribute("userSearch", userSearch);
-		return "user/conversation";
-	}
+	
 		
 }

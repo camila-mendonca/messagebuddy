@@ -23,7 +23,7 @@ layout:decorate="~{base}">
 					</div>
 					<div th:if="${c.lastMessage != null}">
 						<p class="mb-0">"<span th:text="${c.lastMessage.subject}"></span>"</p>
-						<small class="text-muted">Sent on <span th:text="${#dates.format(c.lastMessage.dateSent, 'dd/MM/yyyy')}"></span> by <span th:text="${c.user.username}"></span> </small>
+						<small class="text-muted">Sent on <span th:text="${#dates.format(c.lastMessage.dateSent, 'dd/MM/yyyy')}"></span> by <span th:text="${c.lastMessage.user.username}"></span> </small>
 					</div>
 					<div th:if="${c.lastMessage == null}">
 						<small class="text-muted">No messages yet.</small>

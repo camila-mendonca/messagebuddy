@@ -8,23 +8,9 @@ layout:decorate="~{base}">
 
 <body>
 
-<div layout:fragment="page_content">
-
-	
+<div layout:fragment="page_content">	
 	<form action="#" th:action="@{/user/edituser}" th:object="${user}" method="post">
 	<div class="row">
-		<!-- <div class="col-xl-3 col-lg-3">
-		<div class="card">
-			<div class="card-header py-3">
-				<h6 class="m-0">Profile Picture</h6>
-			</div>
-			<div class="card-body">
-				<input type="hidden" th:field="*{picturePath}">
-				<img th:src="*{picturePath}" class="img-fluid"/>
-			</div>			
-		</div>
-		</div> -->
-	
 		<div class="col-xl-8 col-lg-7">
 		<div class="card">
 			<div class="card-header py-3">

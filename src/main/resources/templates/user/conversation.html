@@ -32,11 +32,13 @@
 <body>
 
 	<div layout:fragment="page_content">
+	<!-- If private conversation and not member -->
 	<div th:if="${conversation.open == false} and ${isMember == false}">
 		<div class="alert alert-warning" role="alert">
 			This is a private conversation! In order to access it you need an invitation.
 		</div>
 	</div>
+	
 	<div th:unless="${conversation.open == false} and ${isMember==false}">
 		<h1 class="h3 mb-2 text-gray-800"><span th:text="${conversation.subject}"></span></h1>
 		<p>Created on <span th:text="${#dates.format(conversation.creationDate, 'dd/MM/yyyy')}"></span>

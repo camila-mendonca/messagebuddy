@@ -99,6 +99,14 @@ public class ConversationController {
 	
 	// Member related methods
 	
+	@PostMapping("/user/searchuser")
+	public String search(UserSearchForm userSearch, Model model, Message message) {
+		model = this.getConversationData(userSearch.getConversation().getConversationId(), model, message, userSearch);		
+		model.addAttribute("users", userService.searchUser(userSearch));
+
+		return "user/conversation";
+	}
+	
 	@GetMapping("/user/invite/person={person},conversation={conversation}")
 	public String inviteUserToConversation(@PathVariable("person") Long userId, @PathVariable("conversation") Long conversationId, Model model, Message message, UserSearchForm userSearch ) {
 		model = this.getConversationData(conversationId, model, message, userSearch);
